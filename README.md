@@ -1,9 +1,9 @@
 # 一、 geodata 规则集文件说明
 ## 1. 文件类型
-① [Clash](https://github.com/Dreamacro/clash) geodata 规则集文件，包括：geosite.dat、geoip.dat、Country.mmdb 和 geoip.metadb、ASN.mmdb（仅限 [mihomo 内核](https://github.com/MetaCubeX/mihomo)）等  
+① Clash geodata 规则集文件，包括：geosite.dat、geoip.dat、Country.mmdb 和 geoip.metadb、ASN.mmdb（仅限 [mihomo 内核](https://github.com/MetaCubeX/mihomo)）等  
 ② [sing-box](https://github.com/SagerNet/sing-box) geodata 规则集文件，包括：geosite.db 和 geoip.db 等
 ## 2. 数据源
-① 每天凌晨 2 点半（北京时间）自动构建，根据 [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 和 [Loyalsoldier/geoip](https://github.com/Loyalsoldier/geoip) 进行深度定制，可点击查看包含的[域名列表](https://github.com/DustinWin/domain-list-custom/tree/domains)和 [IP 段列表](https://github.com/DustinWin/geoip/tree/ips)  
+① 每天凌晨 2 点半（北京时间 UTC+8）自动构建，根据 [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 和 [Loyalsoldier/geoip](https://github.com/Loyalsoldier/geoip) 进行深度定制，可点击查看包含的[域名列表](https://github.com/DustinWin/domain-list-custom/tree/domains)和 [IP 段列表](https://github.com/DustinWin/geoip/tree/ips)  
 ② `geosite,fakeip-filter,📌 fakeip 过滤` 源采用 [ShellCrash/public/fake_ip_filter.list](https://github.com/juewuy/ShellCrash/blob/dev/public/fake_ip_filter.list)（sing-box 内核专用，可参考《[ShellCrash 使用 sing-box PuerNya 版内核进行 DNS 分流教程-geodata 方案](https://github.com/DustinWin/clash_singbox-tutorials/blob/main/%E6%95%99%E7%A8%8B%E5%90%88%E9%9B%86/sing-box/%E8%BF%9B%E9%98%B6%E7%AF%87/ShellCrash%20%E4%BD%BF%E7%94%A8%20sing-box%20PuerNya%20%E7%89%88%E5%86%85%E6%A0%B8%E8%BF%9B%E8%A1%8C%20DNS%20%E5%88%86%E6%B5%81%E6%95%99%E7%A8%8B-geodata%20%E6%96%B9%E6%A1%88.md)》）  
 ③ `geosite,ads,🛑 广告拦截` 源采用 [privacy-protection-tools/anti-AD](https://github.com/privacy-protection-tools/anti-AD)  
 ④ `geosite,private,🔒 私有网络` 源采用 [blackmatrix7/ios_rule_script/Lan](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Lan)（仅域名）和 [TrackersList](https://github.com/XIU2/TrackersListCollection/blob/master/all.txt)（仅域名）组合，并添加主流 [Clash dashboard 在线面板](https://github.com/DustinWin/clash_singbox-tools/tree/main/Clash-dashboard)域名（`clash.razord.top`、`clash.metacubex.one`、`yacd.haishan.me`、`yacd.metacubex.one`、`d.metacubex.one`、`metacubex.github.io` 和 `metacubexd.pages.dev`）  
@@ -185,7 +185,9 @@
 </table>
 
 ## 4. 文件导入
-### ① 导入到 Linux 端（以 [ShellCrash](https://github.com/juewuy/ShellCrash) 导入 geosite.dat、geosite.db、geoip.dat、Country.mmdb、geoip.metadb、ASN.mmdb 和 geoip.db 为例）
+<details>
+<summary>① 导入到 Linux 端（以 <a href="https://github.com/juewuy/ShellCrash">ShellCrash</a> 导入 geosite.dat、geosite.db、geoip.dat、Country.mmdb、geoip.metadb、ASN.mmdb 和 geoip.db 为例）</summary>
+
 连接 SSH 后执行如下命令：
 ```
 # 适用于 Clash 内核
@@ -200,7 +202,10 @@ curl -o $CRASHDIR/geosite.db -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_ge
 curl -o $CRASHDIR/geoip.db -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@sing-box/geoip.db
 $CRASHDIR/start.sh restart
 ```
-### ② 导入到 Windows 端（以 [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) 导入 geosite.dat、geoip.dat、Country.mmdb、geoip.metadb 和 ASN.mmdb 为例）
+</details>
+<details>
+<summary>② 导入到 Windows 端（以 <a href="https://github.com/clash-verge-rev/clash-verge-rev">Clash Verge</a> 导入 geosite.dat、geoip.dat、Country.mmdb、geoip.metadb 和 ASN.mmdb 为例）</summary>
+
 以管理员身份运行 CMD 命令提示符，执行如下命令：
 ```
 taskkill /f /t /im "Clash Verge*"
@@ -212,8 +217,12 @@ curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\Country.mmdb -L http
 curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\geoip.metadb -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/geoip.metadb
 curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\ASN.mmdb -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/Country-ASN.mmdb
 ```
+</details>
+
 ## 5. 文件拓展
-### ① [user.yaml](https://github.com/DustinWin/ruleset_geodata/tree/clash-config)（仅限 mihomo 内核）
+<details>
+<summary>① <a href="https://github.com/DustinWin/ruleset_geodata/tree/clash-config">user.yaml</a>（仅限 mihomo 内核）</summary>
+
 注：
 - 1. 每天凌晨 3 点（北京时间）自动构建
 - 2. 含有“fakeip”字样的 .yaml 配置文件才含有 `fake-ip-filter` 参数的数据
@@ -248,7 +257,10 @@ taskkill /f /t /im Clash-Verge*
 taskkill /f /t /im clash-meta*
 curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles\Merge.yaml -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash-config/geodata-{DNS 模式}-user.yaml
 ```
-### ② [dns.json](https://github.com/DustinWin/ruleset_geodata/tree/sing-box-config)（仅限 sing-box PuerNya 版内核）
+</details>
+<details>
+<summary>② <a href="https://github.com/DustinWin/ruleset_geodata/tree/sing-box-config">dns.json</a>（仅限 <a href="https://github.com/PuerNya/sing-box/tree/building">sing-box PuerNya 版内核</a>）</summary>
+
 注：
 - 1. 每天凌晨 3 点（北京时间）自动构建
 - 2. 含有“lite”后缀的 .json 配置文件适合无 sing-box 广告拦截且配合 [AdGuardHome](https://github.com/AdguardTeam/AdGuardHome) 的方案
@@ -266,7 +278,10 @@ curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles\Merge.yaml 
 curl -o $CRASHDIR/jsons/dns.json -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@sing-box-config/geodata-{DNS 模式}-dns-lite.json
 $CRASHDIR/start.sh restart
 ```
-### ③ 添加定时任务（以 ShellCrash 为例，安装路径为 */data/ShellCrash*）  
+</details>
+<details>
+<summary>③ 添加定时任务（以 ShellCrash 为例，安装路径为 <i>/data/ShellCrash</i>）</summary>
+
 连接 SSH 后执行 `vi $CRASHDIR/task/task.user`，按一下 Ins 键（Insert 键），粘贴如下内容：
 - 注：将下面命令中的 `{DNS 模式}` 替换为正在使用的 DNS 模式（`fakeip` 或 `redirhost`）
 
@@ -281,12 +296,14 @@ $CRASHDIR/start.sh restart
 ```
 按一下 Esc 键（退出键），输入英文冒号 `:`，继续输入 `wq` 并回车  
 执行 `crash`，进入 ShellCrash -> 5 配置自动任务 -> 1 添加自动任务，可以看到末尾就有添加的定时任务，输入对应的数字并回车后可设置执行条件
+</details>
+
 # 二、 ruleset 规则集文件说明
 ## 1. 文件类型
 ① Clash ruleset 规则集文件，格式为 `.yaml`（`format: yaml`）和 `.list`（`format: text`）  
 ② sing-box ruleset 规则集文件，格式有 `.srs`（`"format": "binary"`）和 `.json`（`"format": "source"`）
 ## 2. 数据源
-① 每天凌晨 2 点半（北京时间）自动构建，根据 [Loyalsoldier/clash-rules](https://github.com/Loyalsoldier/clash-rules) 和 [Loyalsoldier/geoip](https://github.com/Loyalsoldier/geoip) 进行深度定制，可点击查看包含的[域名列表](https://github.com/DustinWin/domain-list-custom/tree/domains)和 [IP 段列表](https://github.com/DustinWin/geoip/tree/ips)  
+① 每天凌晨 2 点半（北京时间 UTC+8）自动构建，根据 [Loyalsoldier/clash-rules](https://github.com/Loyalsoldier/clash-rules) 和 [Loyalsoldier/geoip](https://github.com/Loyalsoldier/geoip) 进行深度定制，可点击查看包含的[域名列表](https://github.com/DustinWin/domain-list-custom/tree/domains)和 [IP 段列表](https://github.com/DustinWin/geoip/tree/ips)  
 ② `rule-set,fakeip-filter,📌 fakeip 过滤` 源采用 [ShellCrash/public/fake_ip_filter.list](https://github.com/juewuy/ShellCrash/blob/dev/public/fake_ip_filter.list)（sing-box 内核专用，可参考《[ShellCrash 使用 sing-box PuerNya 版内核进行 DNS 分流教程-ruleset方案](https://github.com/DustinWin/clash_singbox-tutorials/blob/main/%E6%95%99%E7%A8%8B%E5%90%88%E9%9B%86/sing-box/%E8%BF%9B%E9%98%B6%E7%AF%87/ShellCrash%20%E4%BD%BF%E7%94%A8%20sing-box%20PuerNya%20%E7%89%88%E5%86%85%E6%A0%B8%E8%BF%9B%E8%A1%8C%20DNS%20%E5%88%86%E6%B5%81%E6%95%99%E7%A8%8B-ruleset%E6%96%B9%E6%A1%88.md)》）  
 ③ `rule-set,ads,🛑 广告拦截` 源采用 [privacy-protection-tools/anti-AD](https://github.com/privacy-protection-tools/anti-AD)  
 ④ `rule-set,applications,🖥️ 直连软件` 源采用 [blackmatrix7/ios_rule_script/Download](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Download) 和 [Loyalsoldier/clash-rules/applications.txt](https://github.com/Loyalsoldier/clash-rules/blob/release/applications.txt) 组合  
@@ -312,7 +329,9 @@ $CRASHDIR/start.sh restart
 ㉔ `rule-set,privateip,🔒 私有网络` 源采用 [GeoLite2/private.txt](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)、[blackmatrix7/ios_rule_script/Lan](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/Lan)（仅 IP）和 [TrackersList](https://github.com/XIU2/TrackersListCollection/blob/master/all.txt)（仅 IP）组合  
 ㉕ `rule-set,cnip,🇨🇳 直连 IP` 源采用 [GeoLite2/cn.txt](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)、[17mon/china_ip_list](https://github.com/17mon/china_ip_list)、[gaoyifan/china-operator-ip](https://github.com/gaoyifan/china-operator-ip)、[blackmatrix7/ios_rule_script/ChinaIPs](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash/ChinaIPs) 和 [APNIC/CN](https://ftp.apnic.net/stats/apnic/delegated-apnic-latest) 组合
 ## 3. 文件使用
-### ① Clash 内核
+<details>
+<summary>① Clash 内核</summary>
+
 - 注：以下只是节选，请酌情套用
 
 ```
@@ -552,7 +571,10 @@ rules:
   - RULE-SET,privateip,🔒 私有网络,no-resolve
   - RULE-SET,cnip,🇨🇳 直连 IP
 ```
-### ② sing-box 内核
+</details>
+<details>
+<summary>② sing-box 内核</summary>
+
 - 注：以下只是节选，请酌情套用
 
 ```
@@ -785,8 +807,12 @@ rules:
   }
 }
 ```
+</details>
+
 ## 4. 文件拓展
-### ① [user.yaml](https://github.com/DustinWin/ruleset_geodata/tree/clash-config)（仅限 mihomo 内核）
+<details>
+<summary>① <a href="https://github.com/DustinWin/ruleset_geodata/tree/clash-config">user.yaml</a>（仅限 mihomo 内核）</summary>
+
 注：
 - 1. 每天凌晨 3 点（北京时间）自动构建  
 - 2. 含有“fakeip”字样的 .yaml 配置文件才含有 `fake-ip-filter` 参数的数据
@@ -821,7 +847,10 @@ taskkill /f /t /im Clash-Verge*
 taskkill /f /t /im clash-meta*
 curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles\Merge.yaml -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash-config/ruleset-{DNS 模式}-user.yaml
 ```
-### ② [dns.json](https://github.com/DustinWin/ruleset_geodata/tree/sing-box-config)（仅限 sing-box PuerNya 版内核）
+</details>
+<details>
+<summary>② <a href="https://github.com/DustinWin/ruleset_geodata/tree/sing-box-config">dns.json</a>（仅限 sing-box PuerNya 版内核）</summary>
+
 注：
 - 1. 每天凌晨 3 点（北京时间）自动构建
 - 2. 含有“lite”后缀的 .json 配置文件适合无 sing-box 广告拦截且配合 [AdGuardHome](https://github.com/AdguardTeam/AdGuardHome) 的方案
@@ -839,7 +868,10 @@ curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles\Merge.yaml 
 curl -o $CRASHDIR/jsons/dns.json -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@sing-box-config/ruleset-{DNS 模式}-dns-lite.json
 $CRASHDIR/start.sh restart
 ```
-### ③ 添加定时任务（以 ShellCrash 为例，安装路径为 */data/ShellCrash*）
+</details>
+<details>
+<summary>③ 添加定时任务（以 ShellCrash 为例，安装路径为 <i>/data/ShellCrash</i>）</summary>
+
 • 连接 SSH 后执行 `vi $CRASHDIR/task/task.user`，按一下 Ins 键（Insert 键），粘贴如下内容：
 - 注：将下面命令中的 `{DNS 模式}` 替换为正在使用的 DNS 模式（`fakeip` 或 `redirhost`）
 
@@ -849,3 +881,4 @@ $CRASHDIR/start.sh restart
 ```
 • 按一下 Esc 键（退出键），输入英文冒号 `:`，继续输入 `wq` 并回车  
 • 执行 `crash`，进入 ShellCrash -> 5 配置自动任务 -> 1 添加自动任务，可以看到末尾就有添加的定时任务，输入对应的数字并回车后可设置执行条件
+</details>
