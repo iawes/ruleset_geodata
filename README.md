@@ -578,7 +578,7 @@ rules:
 <summary>② sing-box 内核</summary>
 
 注：
-- 1. 在导入配置前，连接 SSH 后执行命令 `mkdir -p $CRASHDIR/ruleset/`
+- 1. 须手动新建“*ruleset*”文件夹，否则规则集文件不会保存在本地。如导入 ShellCrash，可先连接 SSH 后执行命令 `mkdir -p $CRASHDIR/ruleset/`
 - 2. 以下只是节选，请酌情套用
 
 ```
