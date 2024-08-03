@@ -577,7 +577,9 @@ rules:
 <details>
 <summary>② sing-box 内核</summary>
 
-- 注：以下只是节选，请酌情套用
+注：
+- 1. 在导入配置前，连接 SSH 后执行命令 `mkdir -p $CRASHDIR/ruleset/`
+- 2. 以下只是节选，请酌情套用
 
 ```
 {
