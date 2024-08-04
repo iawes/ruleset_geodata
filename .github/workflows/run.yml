@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "update_version=$(date -d '+8 hours' +%Y-%m-%d)" >> ${GITHUB_ENV}
           echo "domains_download_url=https://raw.githubusercontent.com/DustinWin/domain-list-custom/domains" >> ${GITHUB_ENV}
-          echo "ips_download_url=https://raw.githubusercontent.com/DustinWin/geoip/ips" >> ${GITHUB_ENV}          
+          echo "ips_download_url=https://raw.githubusercontent.com/DustinWin/geoip/ips" >> ${GITHUB_ENV}
         shell: bash
 
       - name: Clone Repository
@@ -129,7 +129,7 @@ jobs:
         run: |
           mkdir -p ./clash-ruleset/ ./sing-box-ruleset/
           domains=(ads private microsoft-cn apple-cn google-cn games-cn ai netflix disney max primevideo appletv youtube tiktok bilibili proxy cn)
-          archs=(fakeip-filter applications networktest)
+          archs=(applications networktest)
           ips=(netflixip telegramip privateip cnip)
 
           # Generate `clash` rule-set (yaml)
@@ -138,7 +138,7 @@ jobs:
             curl -sSL "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,' | sed -e "s/^DOMAIN,/  - '/" -e "s/^DOMAIN-SUFFIX,/  - '+\./" -e "s/$/'/" >> "./clash-ruleset/${domains[i]}.yaml"
           done
 
-          for ((i = 0; i < 3; i++)); do
+          for ((i = 0; i < 2; i++)); do
             echo 'payload:' > "./clash-ruleset/${archs[i]}.yaml"
             curl -sSL "${domains_download_url}/${archs[i]}.list" | sed 's/^/  - /' >> "./clash-ruleset/${archs[i]}.yaml"
           done
@@ -153,12 +153,28 @@ jobs:
             curl -sSL "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,' | sed -e 's/^DOMAIN,//' -e 's/^DOMAIN-SUFFIX,/+\./' > "./clash-ruleset/${domains[i]}.list"
           done
 
-          for ((i = 0; i < 3; i++)); do
+          for ((i = 0; i < 2; i++)); do
             curl -sSL "${domains_download_url}/${archs[i]}.list"  > "./clash-ruleset/${archs[i]}.list"
           done
 
           for ((i = 0; i < 4; i++)); do
             curl -sSL "${ips_download_url}/${ips[i]}.list" | grep 'IP-CIDR' | sed -e 's/^IP-CIDR,//' -e 's/^IP-CIDR6,//' > "./clash-ruleset/${ips[i]}.list"
+          done
+
+          # Ready for generate `clash` rule-set (mrs)
+          for ((i = 0; i < 17; i++)); do
+            mkdir -p "./tools/domains/${domains[i]}/"
+            curl "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,' | sed -e 's/^DOMAIN,//' -e 's/^DOMAIN-SUFFIX,/+\./' > "./tools/domains/${domains[i]}/${domains[i]}.list"
+          done
+
+          for ((i = 0; i < 2; i++)); do
+            mkdir -p "./tools/domains/${archs[i]}/"
+            curl "${domains_download_url}/${archs[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,' | sed -e 's/^DOMAIN,//' -e 's/^DOMAIN-SUFFIX,/+\./' > "./tools/domains/${archs[i]}/${archs[i]}.list"
+          done
+
+          for ((i = 0; i < 4; i++)); do
+            mkdir -p "./tools/ips/${ips[i]}/"
+            curl -sSL "${ips_download_url}/${ips[i]}.list"| grep 'IP-CIDR' | sed -e 's/^IP-CIDR,//' -e 's/^IP-CIDR6,//' > "./tools/ips/${ips[i]}/${ips[i]}.list"
           done
 
           # Ready for generate `sing-box` rule_set
@@ -167,15 +183,37 @@ jobs:
             curl "${domains_download_url}/${domains[i]}.list" | grep -E 'DOMAIN,|DOMAIN-SUFFIX,|DOMAIN-KEYWORD' > "./tools/rules/${domains[i]}/${domains[i]}.yaml"
           done
 
-          for ((i = 0; i < 3; i++)); do
+          for ((i = 0; i < 2; i++)); do
             mkdir -p "./tools/rules/${archs[i]}/"
             curl "${domains_download_url}/${archs[i]}.list" > "./tools/rules/${archs[i]}/${archs[i]}.yaml"
           done
+          mkdir -p "./tools/rules/fakeip-filter/"
+          curl "${domains_download_url}/fakeip-filter.list" > "./tools/rules/fakeip-filter/fakeip-filter.yaml"
 
           for ((i = 0; i < 4; i++)); do
             mkdir -p "./tools/rules/${ips[i]}/"
             curl -sSL "${ips_download_url}/${ips[i]}.list"| grep 'IP-CIDR' > "./tools/rules/${ips[i]}/${ips[i]}.yaml"
           done
+
+      - name: Download and unzip `mihomo core`
+        run: |
+          mihomo_version=$(curl -sSL https://api.github.com/repos/MetaCubeX/mihomo/releases | grep 'tag_name' | grep -v 'Alpha' | head -n 1 | sed -e 's/.*v/v/' -e 's/".*//')
+          curl -sSL "https://github.com/MetaCubeX/mihomo/releases/download/${mihomo_version}/mihomo-linux-amd64-${mihomo_version}.gz" | gzip -d > ./tools/mihomo
+
+      - name: Generate `clash` rule-set (mrs)
+        run: |
+          cd ./tools/
+          chmod +x ./mihomo
+          list=($(ls ./domains/))
+          for ((i = 0; i < ${#list[@]}; i++)); do
+            ./mihomo convert-ruleset domain text "./domains/${list[i]}/${list[i]}.list" ../clash-ruleset/${list[i]}.mrs
+          done
+
+          list=($(ls ./ips/))
+          for ((i = 0; i < ${#list[@]}; i++)); do
+            ./mihomo convert-ruleset ipcidr text "./ips/${list[i]}/${list[i]}.list" ../clash-ruleset/${list[i]}.mrs
+          done
+          rm -rf ./mihomo* ./domains/ ./ips/
 
       - name: Download and unzip `sing-box core`
         run: |

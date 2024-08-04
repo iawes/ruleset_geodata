@@ -27,6 +27,9 @@ jobs:
         run: |
           mkdir -p ./tmp/ ./clash-config/ ./sing-box-config/
           cat <<EOF > ./clash-config/geodata-fakeip-user.yaml
+          hosts:
+            'miwifi.com': 192.168.31.1
+
           mode: rule
           log-level: error
           allow-lan: true
@@ -65,9 +68,8 @@ jobs:
           curl -sSL ${trackerslist} | grep -i '\.[A-Z]' | awk -F'[/:]' '{print $4}' | sed 's/^/    - /' >> ./clash-config/geodata-fakeip-user.yaml
           cat <<EOF >> ./clash-config/geodata-fakeip-user.yaml
             nameserver:
-              - https://1.12.12.12/dns-query
-              - https://223.5.5.5/dns-query
-              
+              - https://doh.pub/dns-query
+              - https://dns.alidns.com/dns-query
           EOF
 
       - name: Generate `clash` geodata-fakeip-user-noprocess.yaml
@@ -85,6 +87,9 @@ jobs:
       - name: Generate `clash` geodata-redirhost-user.yaml
         run: |
           cat <<EOF > ./clash-config/geodata-redirhost-user.yaml
+          hosts:
+            'miwifi.com': 192.168.31.1
+
           mode: rule
           log-level: error
           allow-lan: true
@@ -118,12 +123,12 @@ jobs:
             enhanced-mode: fake-ip
             fake-ip-filter: ['+.*']
             nameserver:
-              - https://1.12.12.12/dns-query
-              - https://223.5.5.5/dns-query
+              - https://doh.pub/dns-query
+              - https://dns.alidns.com/dns-query
             nameserver-policy:
               'geosite:ads': rcode://success
-              'geosite:microsoft-cn,apple-cn,google-cn,games-cn,cn,private': [https://1.12.12.12/dns-query, https://223.5.5.5/dns-query]
-              'geosite:proxy': ['https://8.8.8.8/dns-query#🪜 代理域名', 'https://1.1.1.1/dns-query#🪜 代理域名']
+              'geosite:proxy': [https://dns.google/dns-query, https://cloudflare-dns.com/dns-query]
+              'geosite:cn': [https://doh.pub/dns-query, https://dns.alidns.com/dns-query]
           EOF
 
       - name: Generate `clash` geodata-redirhost-user-noprocess.yaml
@@ -166,49 +171,72 @@ jobs:
         run: |
           grep -v 'find-process-mode' ./clash-config/ruleset-redirhost-user-lite.yaml > ./clash-config/ruleset-redirhost-user-lite-noprocess.yaml
 
-      - name: Generate `sing-box` geodata-dns.json
+      - name: Generate `sing-box` geodata-mix-dns.json
         run: |
-          cat <<EOF > ./sing-box-config/geodata-dns.json
+          cat <<EOF > ./sing-box-config/geodata-mix-dns.json
           {
             "dns": {
+              "hosts": {
+                "miwifi.com": [ "192.168.31.1" ],
+                "doh.pub": [ "1.12.12.12", "120.53.53.53", "2402:4e00::" ],
+                "dns.alidns.com": [ "223.5.5.5", "223.6.6.6", "2400:3200::1", "2400:3200:baba::1" ],
+                "dns.google": [ "8.8.8.8", "8.8.4.4", "2001:4860:4860::8888", "2001:4860:4860::8844" ],
+                "cloudflare-dns.com": [ "1.1.1.1", "1.0.0.1", "2606:4700:4700::1111", "2606:4700:4700::1001" ]
+              },
               "servers": [
                 { "tag": "dns_block", "address": "rcode://success" },
-                { "tag": "dns_direct", "address": [ "https://1.12.12.12/dns-query", "https://223.5.5.5/dns-query" ], "detour": "DIRECT" },
-                { "tag": "dns_proxy", "address": [ "https://8.8.8.8/dns-query", "https://1.1.1.1/dns-query" ] },
+                { "tag": "dns_direct", "address": [ "https://doh.pub/dns-query", "https://dns.alidns.com/dns-query" ], "detour": "DIRECT" },
+                { "tag": "dns_proxy", "address": [ "https://dns.google/dns-query", "https://cloudflare-dns.com/dns-query" ] },
                 { "tag": "dns_fakeip", "address": "fakeip" }
               ],
               "rules": [
                 { "outbound": "any", "server": "dns_direct" },
-                { "clash_mode": "Direct", "server": "dns_direct" },
-                { "clash_mode": "Global", "server": "dns_proxy" },
+                { "clash_mode": "Direct", "query_type": [ "A", "AAAA" ], "server": "dns_direct" },
+                { "clash_mode": "Global", "query_type": [ "A", "AAAA" ], "server": "dns_proxy" },
                 { "geosite": [ "ads" ], "server": "dns_block", "disable_cache": true, "rewrite_ttl": 0 },
-                { "geosite": [ "fakeip-filter", "private" ], "query_type": [ "A", "AAAA" ], "server": "dns_direct" },
-                { "geosite": [ "cn", "proxy" ], "query_type": [ "A", "AAAA" ], "server": "dns_fakeip", "rewrite_ttl": 0 },
-                { "fallback_rules": [ { "geoip": [ "cn" ], "server": "dns_direct" }, { "match_all": true, "server": "dns_fakeip", "rewrite_ttl": 0 }, { "match_all": true } ], "server": "dns_proxy" }
+                { "geosite": [ "proxy" ], "query_type": [ "A", "AAAA" ], "server": "dns_fakeip", "rewrite_ttl": 0 },
+                { "geosite": [ "cn" ], "query_type": [ "A", "AAAA" ], "server": "dns_direct" },
+                { "fallback_rules": [ { "geoip": [ "cn" ], "server": "dns_direct" }, { "match_all": true, "server": "dns_fakeip", "rewrite_ttl": 0 } ], "allow_fallthrough": true, "server": "dns_proxy" }
               ],
-              "final": "dns_proxy",
+              "final": "dns_direct",
               "strategy": "prefer_ipv4",
               "independent_cache": true,
               "lazy_cache": true,
               "reverse_mapping": true,
               "mapping_override": true,
-              "fakeip": { "enabled": true, "inet4_range": "198.18.0.0/15", "inet6_range": "fc00::/18" }
+              "fakeip": { "enabled": true, "inet4_range": "198.18.0.0/15", "inet6_range": "fc00::/18", "exclude_rule": { "geosite": [ "fakeip-filter", "private" ] } }
             }
           }
           EOF
           rm -rf ./tmp*
 
-      - name: Generate `sing-box` geodata-dns-lite.json
+      - name: Generate `sing-box` geodata-mix-dns-lite.json
         run: |
-          grep -v 'dns_block' ./sing-box-config/geodata-dns.json > ./sing-box-config/geodata-dns-lite.json
+          grep -v 'dns_block' ./sing-box-config/geodata-mix-dns.json > ./sing-box-config/geodata-mix-dns-lite.json
 
-      - name: Generate `sing-box` ruleset-dns.json
+      - name: Generate `sing-box` geodata-fakeip-dns.json
         run: |
-          sed 's/geosite/rule_set/' ./sing-box-config/geodata-dns.json | sed 's/"geoip": \[ "cn" \]/"rule_set": \[ "cnip" \]/' > ./sing-box-config/ruleset-dns.json
+          grep -v '"geosite": \[ "cn" \]' ./sing-box-config/geodata-mix-dns.json | sed 's/"proxy"/"cn", "proxy"/' | sed 's/{ "geoip": \[ "cn" \], "server": "dns_direct" }, //' > ./sing-box-config/geodata-fakeip-dns.json
 
-      - name: Generate `sing-box` ruleset-dns-lite.json
+      - name: Generate `sing-box` geodata-fakeip-dns-lite.json
         run: |
-          grep -v 'dns_block' ./sing-box-config/ruleset-dns.json > ./sing-box-config/ruleset-dns-lite.json
+          grep -v 'dns_block' ./sing-box-config/geodata-fakeip-dns.json > ./sing-box-config/geodata-fakeip-dns-lite.json
+
+      - name: Generate `sing-box` ruleset-mix-dns.json
+        run: |
+          sed 's/geosite/rule_set/' ./sing-box-config/geodata-mix-dns.json | sed 's/"geoip": \[ "cn" \]/"rule_set": \[ "cnip" \]/' > ./sing-box-config/ruleset-mix-dns.json
+
+      - name: Generate `sing-box` ruleset-mix-dns-lite.json
+        run: |
+          grep -v 'dns_block' ./sing-box-config/ruleset-mix-dns.json > ./sing-box-config/ruleset-mix-dns-lite.json
+
+      - name: Generate `sing-box` ruleset-fakeip-dns.json
+        run: |
+          grep -v '"rule_set": \[ "cn" \]' ./sing-box-config/ruleset-mix-dns.json | sed 's/"proxy"/"cn", "proxy"/' | sed 's/{ "rule_set": \[ "cnip" \], "server": "dns_direct" }, //' > ./sing-box-config/ruleset-fakeip-dns.json
+
+      - name: Generate `sing-box` ruleset-fakeip-dns-lite.json
+        run: |
+          grep -v 'dns_block' ./sing-box-config/ruleset-fakeip-dns.json > ./sing-box-config/ruleset-fakeip-dns-lite.json
 
       - name: Commit and push `clash-config` branch
         run: |
