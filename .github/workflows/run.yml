@@ -203,6 +203,7 @@ jobs:
       - name: Generate `clash` rule-set (mrs)
         run: |
           cd ./tools/
+          chmod +x ./mihomo
           list=($(ls ./domains/))
           for ((i = 0; i < ${#list[@]}; i++)); do
             mihomo convert-ruleset domain text "./domains/${list[i]}/${list[i]}.list" ../sing-box-ruleset/${list[i]}.mrs
