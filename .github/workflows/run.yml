@@ -211,7 +211,7 @@ jobs:
 
           list=($(ls ./ips/))
           for ((i = 0; i < ${#list[@]}; i++)); do
-            mihomo convert-ruleset ipcidr text "./ips/${list[i]}/${list[i]}.list" ../sing-box-ruleset/${list[i]}.mrs
+            ./mihomo convert-ruleset ipcidr text "./ips/${list[i]}/${list[i]}.list" ../sing-box-ruleset/${list[i]}.mrs
           done
           rm -rf ./mihomo* ./domains/ ./ips/
 
