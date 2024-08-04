@@ -302,7 +302,7 @@ $CRASHDIR/start.sh restart
 
 # 二、 ruleset 规则集文件说明
 ## 1. 文件类型
-① Clash ruleset 规则集文件，格式为 `.yaml`（`format: yaml`）和 `.list`（`format: text`）  
+① Clash ruleset 规则集文件，格式为 `.yaml`（`format: yaml`）、`.list`（`format: text`） 和 `.mrs`（`format: mrs`）  
 ② sing-box ruleset 规则集文件，格式有 `.srs`（`"format": "binary"`）和 `.json`（`"format": "source"`）
 ## 2. 数据源
 ① 每天凌晨 2 点半（北京时间 UTC+8）自动构建，根据 [Loyalsoldier/clash-rules](https://github.com/Loyalsoldier/clash-rules) 和 [Loyalsoldier/geoip](https://github.com/Loyalsoldier/geoip) 进行深度定制，可点击查看包含的[域名列表](https://github.com/DustinWin/domain-list-custom/tree/domains)和 [IP 段列表](https://github.com/DustinWin/geoip/tree/ips)  
@@ -367,9 +367,9 @@ rule-providers:
   ads:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/ads.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/ads.list"
+    format: mrs
+    path: ./rules/ads.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/ads.mrs"
     interval: 86400
 
   applications:
@@ -383,113 +383,113 @@ rule-providers:
   private:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/private.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/private.list"
+    format: mrs
+    path: ./rules/private.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/private.mrs"
     interval: 86400
 
   microsoft-cn:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/microsoft-cn.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/microsoft-cn.list"
+    format: mrs
+    path: ./rules/microsoft-cn.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/microsoft-cn.mrs"
     interval: 86400
 
   apple-cn:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/apple-cn.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/apple-cn.list"
+    format: mrs
+    path: ./rules/apple-cn.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/apple-cn.mrs"
     interval: 86400
 
   google-cn:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/google-cn.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/google-cn.list"
+    format: mrs
+    path: ./rules/google-cn.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/google-cn.mrs"
     interval: 86400
 
   games-cn:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/games-cn.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/games-cn.list"
+    format: mrs
+    path: ./rules/games-cn.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/games-cn.mrs"
     interval: 86400
 
   netflix:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/netflix.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/netflix.list"
+    format: mrs
+    path: ./rules/netflix.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/netflix.mrs"
     interval: 86400
 
   disney:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/disney.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/disney.list"
+    format: mrs
+    path: ./rules/disney.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/disney.mrs"
     interval: 86400
 
   max:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/max.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/max.list"
+    format: mrs
+    path: ./rules/max.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/max.mrs"
     interval: 86400
 
   primevideo:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/primevideo.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/primevideo.list"
+    format: mrs
+    path: ./rules/primevideo.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/primevideo.mrs"
     interval: 86400
 
   appletv:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/appletv.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/appletv.list"
+    format: mrs
+    path: ./rules/appletv.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/appletv.mrs"
     interval: 86400
 
   youtube:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/youtube.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/youtube.list"
+    format: mrs
+    path: ./rules/youtube.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/youtube.mrs"
     interval: 86400
 
   tiktok:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/tiktok.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/tiktok.list"
+    format: mrs
+    path: ./rules/tiktok.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/tiktok.mrs"
     interval: 86400
 
   bilibili:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/bilibili.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/bilibili.list"
+    format: mrs
+    path: ./rules/bilibili.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/bilibili.mrs"
     interval: 86400
 
   ai:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/ai.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/ai.list"
+    format: mrs
+    path: ./rules/ai.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/ai.mrs"
     interval: 86400
 
   networktest:
@@ -503,49 +503,49 @@ rule-providers:
   proxy:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/proxy.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/proxy.list"
+    format: mrs
+    path: ./rules/proxy.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/proxy.mrs"
     interval: 86400
 
   cn:
     type: http
     behavior: domain
-    format: text
-    path: ./rules/cn.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/cn.list"
+    format: mrs
+    path: ./rules/cn.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/cn.mrs"
     interval: 86400
 
   netflixip:
     type: http
     behavior: ipcidr
-    format: text
-    path: ./rules/netflixip.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/netflixip.list"
+    format: mrs
+    path: ./rules/netflixip.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/netflixip.mrs"
     interval: 86400
 
   telegramip:
     type: http
     behavior: ipcidr
-    format: text
-    path: ./rules/telegramip.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/telegramip.list"
+    format: mrs
+    path: ./rules/telegramip.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/telegramip.mrs"
     interval: 86400
 
   privateip:
     type: http
     behavior: ipcidr
-    format: text
-    path: ./rules/privateip.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/privateip.list"
+    format: mrs
+    path: ./rules/privateip.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/privateip.mrs"
     interval: 86400
 
   cnip:
     type: http
     behavior: ipcidr
-    format: text
-    path: ./rules/cnip.list
-    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/cnip.list"
+    format: mrs
+    path: ./rules/cnip.mrs
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/cnip.mrs"
     interval: 86400
 
 rules:
